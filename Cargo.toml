@@ -1,0 +1,34 @@
+[package]
+name = "thumbor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.4.3"  # web server
+anyhow = "1.0.52"  # error handle
+base64 = "0.13.0"  # base64 encode / decode
+bytes = "1.1.0"   # byte stream handle
+image = "0.23.14"  # image process
+lazy_static = "1.4.0" # init static variable by micro
+lru = "0.7.1"     # lru cache
+percent-encoding = "2.1.0"  # url encode / decode
+photon-rs = "0.3.1"   # photo effect
+prost = "0.9.0"    # protobuf process
+reqwest = "0.11.8"  # http client
+serde = { version = "1.0.132", features = ["derive"] } # serialize / deserialize
+tokio = { version = "1.15.0", features = ["full"]}    # async process
+tower = { version = "0.4.11", features = ["util", "timeout", "load-shed", "limit"]}  # server handle
+tower-http = {version = "0.2.0", features = ["add-extension", "compression-full", "trace"]}  #  http kit
+tracing = "0.1.31"  # log trace
+tracing-subscriber = { version = "0.3.9", features = [
+    "env-filter",
+    "time",
+    "local-time"
+] }  # log trace
+time = { version = "0.3.7", features = ["macros"] }
+
+
+[build-dependencies]
+prost-build = "0.9.0"  # compile protobuf
