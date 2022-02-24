@@ -39,6 +39,24 @@
 
 [ Into trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.Into.html)
 
+```rust
+struct S;
+
+struct T;
+
+impl From<S> for T { todo!(); }
+
+let t = T::from(s);
+let t: T = s.into();
+
+
+impl TryFrom<S> for T { todo!(); }
+
+let t = T::try_from(s);
+let t: T = s.try_into().unwrap();
+
+```
+
 ### 6. `TryFrom` / `TryInto` trait 定义，如何使用，调用  `.try_into`
 [ TryFrom trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.TryFrom.html)
 
@@ -55,10 +73,43 @@
 
 ### 9. `log tracing` 打印出来的时区时间问题解决 
 [ 相关讨论 ](https://rustcc.cn/article?id=66e2a76e-8c65-42f7-a773-66dff1a2a21e)
+```rust
+// cargo.toml
+tracing = "0.1.31"
+tracing-subscriber = { version = "0.3.9", features = [
+    "env-filter",
+    "time",
+    "local-time",
+] }
+time = { version = "0.3.7", features = ["macros"] }
+```
 
+```rust
+// code
+let local_time = OffsetTime::new(
+    UtcOffset::from_hms(8, 0,0).unwrap(),
+    format_description!("[year]-[month]-[day] [hour]:[minute]:[second].[subsecond digits:3]")
+);
+
+tracing_subscriber::fmt()
+    .with_env_filter(EnvFilter::from_default_env())
+    .with_timer(local_time)
+    .init();
+```
 ### 10. `FromStr` trait定义，如何使用，调用 `.parse`
 [ From trait ](http://doc.rust-lang.org/1.58.1/std/str/trait.FromStr.html)
+```rust
+struct T;
 
+impl FromStr for T {
+    todo!();
+}
+
+let s: &str = "xxxxxxx";
+
+let t: T = s.parse().unwrap();
+let t = s.parse::<T>().unwrap();
+```
 ### 11. `&[Spec]` 如何理解
 
 ### 12. 字符串切分 split 怎么搞
