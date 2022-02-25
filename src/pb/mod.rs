@@ -100,7 +100,8 @@ mod tests {
             Spec::new_resize(600, 600, resize::SampleFilter::CatmullRom),
             Spec::new_filter(filter::Filter::Marine),
         ]);
-        let s: String = image_spec.borrow().into();
+        // let s: String = image_spec.borrow().into();
+        let s: String = (&image_spec).into();
         assert_eq!(image_spec, s.as_str().try_into().unwrap());
     }
 }

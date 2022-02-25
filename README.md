@@ -35,10 +35,16 @@
 [ visibility and privacy ](https://doc.rust-lang.org/1.58.1/reference/visibility-and-privacy.html?highlight=pub#visibility-and-privacy)
 
 ### 5. `From` / `Into` trait 定义，及如何使用，怎么调用  `.into`
+### 6. `TryFrom` / `TryInto` trait 定义，如何使用，调用  `.try_into`
 [ From trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.From.html)
 
 [ Into trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.Into.html)
 
+[ TryFrom trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.TryFrom.html)
+
+[ TryInto trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.TryInto.html)
+
+会转移所有权
 ```rust
 struct S;
 
@@ -57,10 +63,6 @@ let t: T = s.try_into().unwrap();
 
 ```
 
-### 6. `TryFrom` / `TryInto` trait 定义，如何使用，调用  `.try_into`
-[ TryFrom trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.TryFrom.html)
-
-[ TryInto trait ](http://doc.rust-lang.org/1.58.1/std/convert/trait.TryInto.html)
 
 ### 6. `.try_into` 后面再调用 `map_err` 是为何，还有什么情况下也可以这些书写
 [ map_err in Result ](http://doc.rust-lang.org/1.58.1/std/result/enum.Result.html#method.map_err)
@@ -111,6 +113,29 @@ let t: T = s.parse().unwrap();
 let t = s.parse::<T>().unwrap();
 ```
 ### 11. `&[Spec]` 如何理解
+方法定义入参定义如下：
+```rust
+fn apply(&mut self, specs: &[Spec]) {
+    
+}
+```
+
+`&[Spec]` 表示 `Spec` 切片引用类型
+
+调用上面方法的代码如下：
+```rust
+engine.apply(&spec.spec);
+```
+
+入参 `spec.spec` 的类型是 `Vec<Spec>`，即这边传入的是 `&Vec<Spec>` 类型的参数，为何 `apply` 方法可以识别?
+
+在函数和方法中，Rust 提供了一个极其有用的隐式转换：`Deref` 转换。
+
+当一个实现了 `Deref` 特征的值被传给函数或方法时，Rust会根据函数参数的要求，来决定使用该值原本的类型还是 `Deref` 后的类型；
+
+同时，`Deref` 可以支持连续的隐式转换，直到找到适合的形式为止。
+
+因为 `Vec` 实现了 `Deref` trait，`&Vec<T>` 会被自动解引用为 `&[t]`，符合接口定义
 
 ### 12. 字符串切分 split 怎么搞
 
